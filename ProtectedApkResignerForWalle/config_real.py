@@ -3,7 +3,7 @@
 
 # keystore信息
 # Windows 下路径分割线请注意使用\\转义
-keystorePath = "app/quysNovel.jks"
+keystorePath = "quysNovel.jks"
 keyAlias = "quysNovel"
 keystorePassword = "quys123456"
 keyPassword = "quys123456"
