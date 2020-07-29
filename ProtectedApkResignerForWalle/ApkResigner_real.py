@@ -33,7 +33,7 @@ def curFileDir():
 # 判断当前系统
 def isWindows():
     sysstr = platform.system()
-    if ("Windows" in sysstr):
+    if "Windows" in sysstr:
         return 1
     else:
         return 0
@@ -41,7 +41,7 @@ def isWindows():
 
 # 兼容不同系统的路径分隔符
 def getBackslash():
-    if (isWindows() == 1):
+    if isWindows() == 1:
         return "\\"
     else:
         return "/"
@@ -73,6 +73,16 @@ def createChannelsDir():
         pass
     except Exception:
         pass
+
+
+# 获取cmd命令行输入的渠道列表
+def get_cmd_channels():
+    channel_list = ''
+    argv_slice = sys.argv[1:]
+    if argv_slice:
+        channel_list = ','.join(argv_slice)
+        print('cmd命令行处输入的渠道列表： ', channel_list)
+    return channel_list
 
 
 # 当前脚本文件所在目录
@@ -125,9 +135,13 @@ os.system(checkV2Shell)
 
 # 写入渠道
 if len(config.extraChannelFilePath) > 0:
-    writeChannelShell = "java -jar " + walleChannelWritterPath + " batch2 -f " + config_real.extraChannelFilePath + " " + signedApkPath + " " + channelsOutputFilePath
+    writeChannelShell = "java -jar " + walleChannelWritterPath + " batch2 -f " + config.extraChannelFilePath + " " + signedApkPath + " " + channelsOutputFilePath
 else:
-    writeChannelShell = "java -jar " + walleChannelWritterPath + " batch -f " + channelFilePath + " " + signedApkPath + " " + channelsOutputFilePath
+    cmd_channels = get_cmd_channels()
+    if cmd_channels:
+        writeChannelShell = "java -jar " + walleChannelWritterPath + " batch -c " + cmd_channels + " " + signedApkPath + " " + channelsOutputFilePath
+    else:
+        writeChannelShell = "java -jar " + walleChannelWritterPath + " batch -f " + channelFilePath + " " + signedApkPath + " " + channelsOutputFilePath
 
 os.system(writeChannelShell)
 
